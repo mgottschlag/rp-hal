@@ -473,6 +473,8 @@ pub struct StateMachine<SM: ValidStateMachine, State> {
     _phantom: core::marker::PhantomData<State>,
 }
 
+unsafe impl<SM: ValidStateMachine + Send, State> Send for StateMachine<SM, State> {}
+
 /// Marker for an initialized, but stopped state machine.
 pub struct Stopped;
 /// Marker for an initialized and running state machine.
@@ -654,6 +656,8 @@ pub struct Rx<SM: ValidStateMachine> {
     _phantom: core::marker::PhantomData<SM>,
 }
 
+unsafe impl<SM: ValidStateMachine + Send> Send for Rx<SM> {}
+
 impl<SM: ValidStateMachine> Rx<SM> {
     /// Get the next element from RX FIFO.
     ///
@@ -697,6 +701,8 @@ pub struct Tx<SM: ValidStateMachine> {
     block: *const rp2040_pac::pio0::RegisterBlock,
     _phantom: core::marker::PhantomData<SM>,
 }
+
+unsafe impl<SM: ValidStateMachine + Send> Send for Tx<SM> {}
 
 impl<SM: ValidStateMachine> Tx<SM> {
     /// Write an element to TX FIFO.
